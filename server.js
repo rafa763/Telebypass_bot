@@ -11,6 +11,7 @@ const token = process.env.TOKEN;
 const app = express();
 app.use(express.json());
 app.use(express.static("views"));
+connect();
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + 'views/index.html');
@@ -66,13 +67,6 @@ bot.on('message', async (msg) => {
     }
 });
 
-connect().then(err => {
-    if (err) {
-        console.log(err);
-    } else {
-
-    app.listen(PORT, () => {
-        console.log(`Server running on port ${PORT}`);
-    });
-    }
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
