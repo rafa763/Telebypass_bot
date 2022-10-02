@@ -2,15 +2,16 @@ const TelegramBot = require('node-telegram-bot-api');
 const express = require('express');
 const dotenv = require('dotenv').config();
 const axios = require('axios');
-const bodyParser = require('body-parser');
 const Cache = require('./model');
+const connect = require('./db');
 
 
 const PORT = process.env.PORT || 3000;
 const token = process.env.TOKEN;
 const app = express();
-app.use(bodyParser.json());
+app.use(express.json());
 app.use(express.static("views"));
+connect();
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + 'views/index.html');
@@ -24,13 +25,8 @@ bot.on('message', async (msg) => {
     const chatId = msg.chat.id;
     const message = msg.text;
     const caption = msg.caption;
+    const username = msg.from.username;
 
-    // check if entry is cached
-    const cached = await Cache.findOne({user: chatId, text: message});
-    if (cached) {
-        bot.sendPhoto(chatId, cached.link, {caption: cached.caption});
-        return;
-    }
     // grab the link from the message
     const urlRegex = /(https?:\/\/[^ \\\n]*)/;
     let url;
@@ -43,17 +39,26 @@ bot.on('message', async (msg) => {
   // send a message to the chat acknowledging receipt of their message
     if (url) {
         try {
-            // bypass the graped link using the bypass api
-            const passed = await axios.get(`https://bypass.pm/bypass2?url=${url[1]}`);
-            // cache the result
-            const cache = new Cache({
-                user: chatId,
-                text: message,
-                caption: caption,
-                link: passed.data,
-            });
-            bot.sendMessage(chatId, `API | ${passed.data.destination}`);
+            // check if the url is cached
+            const cached = await Cache.findOne({message: url[1]});
+            if (cached) {
+                bot.sendMessage(chatId, `Cache | ${cached.link}`);
+                return;
+            } else {
+                // bypass the graped link using the bypass api
+                const passed = await axios.get(`https://bypass.pm/bypass2?url=${url[1]}`);
+                // cache the result
+                const cache = new Cache({
+                    user: username,
+                    message: url[1],
+                    link: passed.data.destination,
+                });
+                await cache.save();
+                bot.sendMessage(chatId, `API | ${passed.data.destination}`);
+                return;
+            }
         } catch (error) {
+            console.log(error);
             bot.sendMessage(chatId, "Error, I can only bypass Linkvertise links");
         }  
     }
