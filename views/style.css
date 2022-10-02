@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato&display=swap');
+
+body {
+    background: linear-gradient(327.21deg, rgba(33, 0, 75, 0.24) 3.65%, rgba(60, 0, 136, 0) 40.32%), linear-gradient(245.93deg, rgba(209, 21, 111, 0.16) 0%, rgba(209, 25, 80, 0) 36.63%), linear-gradient(147.6deg, rgba(58, 19, 255, 0) 29.79%, rgba(98, 19, 255, 0.01) 85.72%), #13111C;
+    font-family: 'Lato', sans-serif;
+    font-size: 1.1rem;
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;;
+    align-items: center;
+    height: 100%;
+    /* width: 100%; */
+    padding: 0 1.2rem;
+}
+
+.main {
+    margin-top: 13%;
+}
+
+a {
+    color: #333;
+    text-decoration: none;
+}
+
+h1 {
+    color: #fff;
+}
+
+p {
+    color: hsl(246, 11%, 42%);
+    font-size: 1.25rem;
+    line-height: 1.5;
+    margin-bottom: 3rem;
+    max-width: 36rem;
+}
+
+.button {
+    border-radius: 0.5rem;
+    padding: 0.75rem 2.75rem;
+    --tw-text-opacity: 1;
+    color: rgba(255,255,255,var(--tw-text-opacity));
+    font-weight: 600;
+    box-shadow: rgb(0 0 0 / 4%) 0px 0px 24px;
+    background: linear-gradient(76.35deg, rgb(128, 26, 230) 15.89%, rgb(162, 26, 230) 89.75%);
+}
+
+.button:hover {
+    background: linear-gradient(76.35deg, rgb(162, 26, 230) 15.89%, rgb(128, 26, 230) 89.75%);
+}
+
+footer {
+    color: #fff;
+    font-size: 14px;
+    bottom: 0%;
+}
